@@ -41,9 +41,12 @@ reset_vector:
 #	csrw mscratch, x0
 	
 	# write mtvec and make sure it sticks
-	la t0, error
 
+# write acception handle
+	la t0, error
 	csrw mtvec, t0   #mtvec = t0;
+
+
 #	csrr t1, error
 	la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE 
 
@@ -51,7 +54,7 @@ reset_vector:
 #	slli a2, a3, RISCV_PGSHIFT  #left move 
 	add sp, sp, a2
 	j zzy
-.section .data
+.section .bss
 .align 6
 stacks:
 	.skip RISCV_PGSIZE * MAX_HARTS
