@@ -1,0 +1,4 @@
+#define RISCV_PGSHIFT 12
+#define RISCV_PGSIZE (1 << RISCV_PGSHIFT)  // 4K
+#define MENTRY_FRAME_SIZE 0
+#define MAX_HARTS 8
