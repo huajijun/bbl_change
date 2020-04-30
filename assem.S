@@ -59,3 +59,7 @@ reset_vector:
 stacks:
 	.skip RISCV_PGSIZE * MAX_HARTS
 
+
+error:
+    csrrw sp, mscratch, sp
+    
