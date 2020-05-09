@@ -20,3 +20,7 @@ void pmp_trap(void)
 	int  a =1;
 }
 
+void time_clock(void)
+{
+
+}

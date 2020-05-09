@@ -38,7 +38,8 @@ reset_vector:
 	li x29, 0
 	li x30, 0
 	li x31, 0
-	li a1 , 10000
+# time setting
+	li a1 , 0x63
 	li a0 , 0x2004000
 	sd  a1 , 0(a0)
 	
@@ -47,6 +48,8 @@ reset_vector:
 	
 	sd a1 , 0(a0)
 	li a1 , 0
+
+
 #	csrw mscratch, x0
 	
 	# write mtvec and make sure it sticks
@@ -54,9 +57,14 @@ reset_vector:
 # write acception handle
 	la t0, error
 	csrw mtvec, t0   #mtvec = t0;
+
+#time setting
 	li a0, 0xb0
 	csrw mip, a0
 	csrw mie, a0
+    csrr a0 , mstatus
+    or a0 , a0, 0x8
+    csrw mstatus, a0
 
 
 #	csrr t1, error
@@ -69,7 +77,7 @@ reset_vector:
 1:
 	j 1b
 error:
-    	csrrw sp, mscratch, sp
+    csrrw sp, mscratch, sp
 	beqz sp, .Ltrap_from_machine_mode
 	STORE a0, 10*REGBYTES(sp)
   	STORE a1, 11*REGBYTES(sp)
@@ -125,6 +133,7 @@ error:
 	STORE x0, (sp)
 	jalr t1
 	csrw mscratch, sp
+restore_reg:
 	  LOAD ra, 1*REGBYTES(sp)
  	LOAD gp, 3*REGBYTES(sp)
   	LOAD tp, 4*REGBYTES(sp)
@@ -158,6 +167,9 @@ error:
   	LOAD sp, 2*REGBYTES(sp)
   	mret
 
+__time_clock:
+    jal time_clock 
+    j restore_reg   
 
 .section .bss
 .align 6
@@ -175,5 +187,10 @@ trap_table:
   	.dc.a bad_trap
   	.dc.a bad_trap
 	.dc.a bad_trap
+	.dc.a bad_trap
+	.dc.a bad_trap
+	.dc.a bad_trap
+	.dc.a bad_trap
+	.dc.a __time_clock
  
 	
