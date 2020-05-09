@@ -5,6 +5,7 @@
 reset_vector:
   j do_reset
 
+#  reset reg and  keep a0 , a1
  do_reset:
  	li x1, 0
 	li x2, 0
@@ -38,6 +39,25 @@ reset_vector:
 	li x29, 0
 	li x30, 0
 	li x31, 0
+
+	csrw mscratch, x0
+	
+	# write mtvec and make sure it sticks
+
+# write acception handle
+	la t0, error
+	csrw mtvec, t0   #mtvec = t0;
+	csrr t1 , mtvec
+1:	bne t0, t1 , 1b
+
+
+
+# set sp point
+	la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE 
+
+#	csrr a3, mhartid
+#	slli a2, a3, RISCV_PGSHIFT  #left move 
+	add sp, sp, a2
 # time setting
 	li a1 , 0x63
 	li a0 , 0x2004000
@@ -48,36 +68,18 @@ reset_vector:
 	
 	sd a1 , 0(a0)
 	li a1 , 0
-
-
-#	csrw mscratch, x0
-	
-	# write mtvec and make sure it sticks
-
-# write acception handle
-	la t0, error
-	csrw mtvec, t0   #mtvec = t0;
-
-#time setting
 	li a0, 0xb0
 	csrw mip, a0
 	csrw mie, a0
-    csrr a0 , mstatus
-    or a0 , a0, 0x8
-    csrw mstatus, a0
-
-
-#	csrr t1, error
-	la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE 
-
-#	csrr a3, mhartid
-#	slli a2, a3, RISCV_PGSHIFT  #left move 
-	add sp, sp, a2
+    	csrr a0 , mstatus
+    	or a0 , a0, 0x8
+    	csrw mstatus, a0
 	jal zzy
 1:
 	j 1b
+.align 4
 error:
-    csrrw sp, mscratch, sp
+    	csrrw sp, mscratch, sp
 	beqz sp, .Ltrap_from_machine_mode
 	STORE a0, 10*REGBYTES(sp)
   	STORE a1, 11*REGBYTES(sp)
@@ -85,6 +87,8 @@ error:
   	csrr a1, mcause
   	bgez a1, .Lhandle_trap_in_machine_mode
     
+	sll a1 , a1 ,1
+	
 .Ltrap_from_machine_mode:
 	csrr sp, mscratch
   	addi sp, sp, -INTEGER_CONTEXT_SIZE
@@ -98,13 +102,14 @@ error:
   	STORE gp, 3*REGBYTES(sp)
   	STORE tp, 4*REGBYTES(sp)
   	STORE t0, 5*REGBYTES(sp)
-1:	auipc t0, %pcrel_hi(trap_table)  # t0 <- %hi(trap_table)
+#1:	auipc t0, %pcrel_hi(trap_table)  # t0 <- %hi(trap_table)
+1:	la t0 , trap_table
   	STORE t1, 6*REGBYTES(sp)
   	sll t1, a1, LOG_REGBYTES         # t1 <- mcause * ptr size
   	STORE t2, 7*REGBYTES(sp)
   	add t1, t0, t1                   # t1 <- %hi(trap_table)[mcause]
   	STORE s0, 8*REGBYTES(sp)
-  	LOAD t1, %pcrel_lo(1b)(t1)       # t1 <- trap_table[mcause]
+#  	LOAD t1, %pcrel_lo(1b)(t1)       # t1 <- trap_table[mcause]
   	STORE s1, 9*REGBYTES(sp)
   	mv a0, sp                        # a0 <- regs
   	STORE a2,12*REGBYTES(sp)
@@ -130,11 +135,12 @@ error:
   	STORE t5,30*REGBYTES(sp)
   	STORE t6,31*REGBYTES(sp)
   	STORE t0, 2*REGBYTES(sp) 
-	STORE x0, (sp)
-	jalr t1
+	STORE x0, (sp)	
+	ld t0 ,0(t1)
+	jalr t0
 	csrw mscratch, sp
 restore_reg:
-	  LOAD ra, 1*REGBYTES(sp)
+	LOAD ra, 1*REGBYTES(sp)
  	LOAD gp, 3*REGBYTES(sp)
   	LOAD tp, 4*REGBYTES(sp)
   	LOAD t0, 5*REGBYTES(sp)
@@ -166,7 +172,7 @@ restore_reg:
   	LOAD t6,31*REGBYTES(sp)
   	LOAD sp, 2*REGBYTES(sp)
   	mret
-
+.align 6
 __time_clock:
     jal time_clock 
     j restore_reg   
@@ -183,7 +189,7 @@ trap_table:
   	.dc.a pmp_trap
   	.dc.a bad_trap
   	.dc.a pmp_trap
-  	.dc.a pmp_trap
+	.dc.a __time_clock
   	.dc.a bad_trap
   	.dc.a bad_trap
 	.dc.a bad_trap

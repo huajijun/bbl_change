@@ -22,5 +22,6 @@ void pmp_trap(void)
 
 void time_clock(void)
 {
+	int a = 2;
 
 }

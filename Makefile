@@ -4,4 +4,4 @@ spike:
 	spike -d -m0x10000000:0x20000 test
 
 dump:
-	riscv64-ls-elf-objdump -d test > test.dmp
+	riscv64-ls-elf-objdump -D test > test.dmp
