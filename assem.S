@@ -1,6 +1,6 @@
 #include "variable.h"
 .section .text
-.align 6
+.align 2
   .globl reset_vector
 reset_vector:
   j do_reset
@@ -59,22 +59,24 @@ reset_vector:
 #	slli a2, a3, RISCV_PGSHIFT  #left move 
 	add sp, sp, a2
 # time setting
-	li a1 , 0x63
-	li a0 , 0x2004000
-	sd  a1 , 0(a0)
+#	li a1 , 0x63
+#	li a0 , 0x2004000
+#	sd  a1 , 0(a0)
 	
-	li a0 , 0x200bff8
-	li a1 , 0
+#	li a0 , 0x200bff8
+#	li a1 , 0
 	
-	sd a1 , 0(a0)
-	li a1 , 0
-	li a0, 0xb0
-	csrw mip, a0
-	csrw mie, a0
-    	csrr a0 , mstatus
-    	or a0 , a0, 0x8
+#	sd a1 , 0(a0)
+#	li a1 , 0
+#	li a0, 0xb0
+	#csrw mip, a0
+#	csrw mie, a0
+ #   	csrr a0 , mstatus
+  #  	or a0 , a0, 0x8
     	csrw mstatus, a0
 	jal zzy
+	ecall
+#	j _payload_start
 1:
 	j 1b
 .align 4
@@ -199,4 +201,10 @@ trap_table:
 	.dc.a bad_trap
 	.dc.a __time_clock
  
-	
+.align 6 
+
+#.globl _payload_start, _payload_end
+                                                                                                         
+#_payload_start:
+#	.incbin "/home/zhangzy/bbl_change/testCopy"
+#_payload_end:

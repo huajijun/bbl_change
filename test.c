@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+//extern void  sbi_init(struct sbi_scratch *scratch);
 int zzy(void)
 {
 	int  a = 1;
