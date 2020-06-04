@@ -1,6 +1,6 @@
 #include "variable.h"
 .section .text
-.align 2
+.align 6
   .globl reset_vector
 reset_vector:
   j do_reset
@@ -40,6 +40,16 @@ reset_vector:
 	li x30, 0
 	li x31, 0
 
+    lui t0, %hi(bootstack)
+    li t1 , 0x10000000
+    sub t0,t0,t1
+    srli t0,t0,12
+    li t1, 8 <<60
+    or      t0, t0, t1
+    csrw    satp, t0
+    sfence.vma
+
+    li x1,0
 	csrw mscratch, x0
 	
 	# write mtvec and make sure it sticks
@@ -55,6 +65,7 @@ reset_vector:
 # set sp point
 	la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE 
 
+    
 #	csrr a3, mhartid
 #	slli a2, a3, RISCV_PGSHIFT  #left move 
 	add sp, sp, a2
@@ -183,6 +194,10 @@ __time_clock:
 .align 6
 stacks:
 	.skip RISCV_PGSIZE * MAX_HARTS
+.section .vma
+.align 6
+vma:
+    
 
 .section .data
 .align 6
@@ -201,10 +216,15 @@ trap_table:
 	.dc.a bad_trap
 	.dc.a __time_clock
  
-.align 6 
-
+.section .bootdata
+.align 12    
+bootstack:
+    .space 4096 * 4
+    .global bootstacktop
+bootstacktop:
 #.globl _payload_start, _payload_end
-                                                                                                         
 #_payload_start:
 #	.incbin "/home/zhangzy/bbl_change/testCopy"
 #_payload_end:
+    
+    

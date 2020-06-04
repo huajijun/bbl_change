@@ -1,265 +1,287 @@
 
-test：     文件格式 elf64-littleriscv
+test:     file format elf64-littleriscv
 
 
 Disassembly of section .text:
 
-000000fffff00000 <reset_vector>:
-  fffff00000:	a009                	j	fffff00002 <do_reset>
+0000000010010000 <reset_vector>:
+    10010000:	a009                	j	10010002 <do_reset>
 
-000000fffff00002 <do_reset>:
-  fffff00002:	4081                	li	ra,0
-  fffff00004:	4101                	li	sp,0
-  fffff00006:	4181                	li	gp,0
-  fffff00008:	4201                	li	tp,0
-  fffff0000a:	4281                	li	t0,0
-  fffff0000c:	4301                	li	t1,0
-  fffff0000e:	4381                	li	t2,0
-  fffff00010:	4401                	li	s0,0
-  fffff00012:	4481                	li	s1,0
-  fffff00014:	4601                	li	a2,0
-  fffff00016:	4681                	li	a3,0
-  fffff00018:	4701                	li	a4,0
-  fffff0001a:	4781                	li	a5,0
-  fffff0001c:	4801                	li	a6,0
-  fffff0001e:	4881                	li	a7,0
-  fffff00020:	4901                	li	s2,0
-  fffff00022:	4981                	li	s3,0
-  fffff00024:	4a01                	li	s4,0
-  fffff00026:	4a81                	li	s5,0
-  fffff00028:	4b01                	li	s6,0
-  fffff0002a:	4b81                	li	s7,0
-  fffff0002c:	4c01                	li	s8,0
-  fffff0002e:	4c81                	li	s9,0
-  fffff00030:	4d01                	li	s10,0
-  fffff00032:	4d81                	li	s11,0
-  fffff00034:	4e01                	li	t3,0
-  fffff00036:	4e81                	li	t4,0
-  fffff00038:	4f01                	li	t5,0
-  fffff0003a:	4f81                	li	t6,0
-  fffff0003c:	34001073          	csrw	mscratch,zero
-  fffff00040:	00000297          	auipc	t0,0x0
-  fffff00044:	03028293          	addi	t0,t0,48 # fffff00070 <error>
-  fffff00048:	30529073          	csrw	mtvec,t0
-  fffff0004c:	30502373          	csrr	t1,mtvec
-  fffff00050:	00629063          	bne	t0,t1,fffff00050 <do_reset+0x4e>
-  fffff00054:	00003117          	auipc	sp,0x3
-  fffff00058:	fac10113          	addi	sp,sp,-84 # fffff03000 <stacks+0x1000>
-  fffff0005c:	9132                	add	sp,sp,a2
-  fffff0005e:	30051073          	csrw	mstatus,a0
-  fffff00062:	122000ef          	jal	ra,fffff00184 <zzy>
-  fffff00066:	00000073          	ecall
-  fffff0006a:	a001                	j	fffff0006a <do_reset+0x68>
-  fffff0006c:	00000013          	nop
+0000000010010002 <do_reset>:
+    10010002:	4081                	li	ra,0
+    10010004:	4101                	li	sp,0
+    10010006:	4181                	li	gp,0
+    10010008:	4201                	li	tp,0
+    1001000a:	4281                	li	t0,0
+    1001000c:	4301                	li	t1,0
+    1001000e:	4381                	li	t2,0
+    10010010:	4401                	li	s0,0
+    10010012:	4481                	li	s1,0
+    10010014:	4601                	li	a2,0
+    10010016:	4681                	li	a3,0
+    10010018:	4701                	li	a4,0
+    1001001a:	4781                	li	a5,0
+    1001001c:	4801                	li	a6,0
+    1001001e:	4881                	li	a7,0
+    10010020:	4901                	li	s2,0
+    10010022:	4981                	li	s3,0
+    10010024:	4a01                	li	s4,0
+    10010026:	4a81                	li	s5,0
+    10010028:	4b01                	li	s6,0
+    1001002a:	4b81                	li	s7,0
+    1001002c:	4c01                	li	s8,0
+    1001002e:	4c81                	li	s9,0
+    10010030:	4d01                	li	s10,0
+    10010032:	4d81                	li	s11,0
+    10010034:	4e01                	li	t3,0
+    10010036:	4e81                	li	t4,0
+    10010038:	4f01                	li	t5,0
+    1001003a:	4f81                	li	t6,0
+    1001003c:	100192b7          	lui	t0,0x10019
+    10010040:	00009317          	auipc	t1,0x9
+    10010044:	fc030313          	addi	t1,t1,-64 # 10019000 <bootstack>
+    10010048:	4081                	li	ra,0
+    1001004a:	34001073          	csrw	mscratch,zero
+    1001004e:	00000297          	auipc	t0,0x0
+    10010052:	03228293          	addi	t0,t0,50 # 10010080 <error>
+    10010056:	30529073          	csrw	mtvec,t0
+    1001005a:	30502373          	csrr	t1,mtvec
+    1001005e:	00629063          	bne	t0,t1,1001005e <do_reset+0x5c>
+    10010062:	00002117          	auipc	sp,0x2
+    10010066:	f9e10113          	addi	sp,sp,-98 # 10012000 <stacks+0x1000>
+    1001006a:	9132                	add	sp,sp,a2
+    1001006c:	30051073          	csrw	mstatus,a0
+    10010070:	14a000ef          	jal	ra,100101ba <zzy>
+    10010074:	00000073          	ecall
+    10010078:	a001                	j	10010078 <do_reset+0x76>
+    1001007a:	00000013          	nop
+    1001007e:	0001                	nop
 
-000000fffff00070 <error>:
-  fffff00070:	34011173          	csrrw	sp,mscratch,sp
-  fffff00074:	00010963          	beqz	sp,fffff00086 <error+0x16>
-  fffff00078:	d42a                	sw	a0,40(sp)
-  fffff0007a:	d62e                	sw	a1,44(sp)
-  fffff0007c:	342025f3          	csrr	a1,mcause
-  fffff00080:	0005d963          	bgez	a1,fffff00092 <error+0x22>
-  fffff00084:	0586                	slli	a1,a1,0x1
-  fffff00086:	34002173          	csrr	sp,mscratch
-  fffff0008a:	7119                	addi	sp,sp,-128
-  fffff0008c:	d62e                	sw	a1,44(sp)
-  fffff0008e:	45b1                	li	a1,12
-  fffff00090:	a009                	j	fffff00092 <error+0x22>
-  fffff00092:	c206                	sw	ra,4(sp)
-  fffff00094:	c60e                	sw	gp,12(sp)
-  fffff00096:	c812                	sw	tp,16(sp)
-  fffff00098:	ca16                	sw	t0,20(sp)
-  fffff0009a:	00001297          	auipc	t0,0x1
-  fffff0009e:	f6628293          	addi	t0,t0,-154 # fffff01000 <trap_table>
-  fffff000a2:	cc1a                	sw	t1,24(sp)
-  fffff000a4:	00359313          	slli	t1,a1,0x3
-  fffff000a8:	ce1e                	sw	t2,28(sp)
-  fffff000aa:	9316                	add	t1,t1,t0
-  fffff000ac:	d022                	sw	s0,32(sp)
-  fffff000ae:	d226                	sw	s1,36(sp)
-  fffff000b0:	850a                	mv	a0,sp
-  fffff000b2:	d832                	sw	a2,48(sp)
-  fffff000b4:	34102673          	csrr	a2,mepc
-  fffff000b8:	da36                	sw	a3,52(sp)
-  fffff000ba:	340012f3          	csrrw	t0,mscratch,zero
-  fffff000be:	dc3a                	sw	a4,56(sp)
-  fffff000c0:	de3e                	sw	a5,60(sp)
-  fffff000c2:	c0c2                	sw	a6,64(sp)
-  fffff000c4:	c2c6                	sw	a7,68(sp)
-  fffff000c6:	c4ca                	sw	s2,72(sp)
-  fffff000c8:	c6ce                	sw	s3,76(sp)
-  fffff000ca:	c8d2                	sw	s4,80(sp)
-  fffff000cc:	cad6                	sw	s5,84(sp)
-  fffff000ce:	ccda                	sw	s6,88(sp)
-  fffff000d0:	cede                	sw	s7,92(sp)
-  fffff000d2:	d0e2                	sw	s8,96(sp)
-  fffff000d4:	d2e6                	sw	s9,100(sp)
-  fffff000d6:	d4ea                	sw	s10,104(sp)
-  fffff000d8:	d6ee                	sw	s11,108(sp)
-  fffff000da:	d8f2                	sw	t3,112(sp)
-  fffff000dc:	daf6                	sw	t4,116(sp)
-  fffff000de:	dcfa                	sw	t5,120(sp)
-  fffff000e0:	defe                	sw	t6,124(sp)
-  fffff000e2:	c416                	sw	t0,8(sp)
-  fffff000e4:	c002                	sw	zero,0(sp)
-  fffff000e6:	00033283          	ld	t0,0(t1)
-  fffff000ea:	9282                	jalr	t0
-  fffff000ec:	34011073          	csrw	mscratch,sp
+0000000010010080 <error>:
+    10010080:	34011173          	csrrw	sp,mscratch,sp
+    10010084:	00010963          	beqz	sp,10010096 <error+0x16>
+    10010088:	d42a                	sw	a0,40(sp)
+    1001008a:	d62e                	sw	a1,44(sp)
+    1001008c:	342025f3          	csrr	a1,mcause
+    10010090:	0005d963          	bgez	a1,100100a2 <error+0x22>
+    10010094:	0586                	slli	a1,a1,0x1
+    10010096:	34002173          	csrr	sp,mscratch
+    1001009a:	7119                	addi	sp,sp,-128
+    1001009c:	d62e                	sw	a1,44(sp)
+    1001009e:	45b1                	li	a1,12
+    100100a0:	a009                	j	100100a2 <error+0x22>
+    100100a2:	c206                	sw	ra,4(sp)
+    100100a4:	c60e                	sw	gp,12(sp)
+    100100a6:	c812                	sw	tp,16(sp)
+    100100a8:	ca16                	sw	t0,20(sp)
+    100100aa:	00000297          	auipc	t0,0x0
+    100100ae:	19628293          	addi	t0,t0,406 # 10010240 <trap_table>
+    100100b2:	cc1a                	sw	t1,24(sp)
+    100100b4:	00359313          	slli	t1,a1,0x3
+    100100b8:	ce1e                	sw	t2,28(sp)
+    100100ba:	9316                	add	t1,t1,t0
+    100100bc:	d022                	sw	s0,32(sp)
+    100100be:	d226                	sw	s1,36(sp)
+    100100c0:	850a                	mv	a0,sp
+    100100c2:	d832                	sw	a2,48(sp)
+    100100c4:	34102673          	csrr	a2,mepc
+    100100c8:	da36                	sw	a3,52(sp)
+    100100ca:	340012f3          	csrrw	t0,mscratch,zero
+    100100ce:	dc3a                	sw	a4,56(sp)
+    100100d0:	de3e                	sw	a5,60(sp)
+    100100d2:	c0c2                	sw	a6,64(sp)
+    100100d4:	c2c6                	sw	a7,68(sp)
+    100100d6:	c4ca                	sw	s2,72(sp)
+    100100d8:	c6ce                	sw	s3,76(sp)
+    100100da:	c8d2                	sw	s4,80(sp)
+    100100dc:	cad6                	sw	s5,84(sp)
+    100100de:	ccda                	sw	s6,88(sp)
+    100100e0:	cede                	sw	s7,92(sp)
+    100100e2:	d0e2                	sw	s8,96(sp)
+    100100e4:	d2e6                	sw	s9,100(sp)
+    100100e6:	d4ea                	sw	s10,104(sp)
+    100100e8:	d6ee                	sw	s11,108(sp)
+    100100ea:	d8f2                	sw	t3,112(sp)
+    100100ec:	daf6                	sw	t4,116(sp)
+    100100ee:	dcfa                	sw	t5,120(sp)
+    100100f0:	defe                	sw	t6,124(sp)
+    100100f2:	c416                	sw	t0,8(sp)
+    100100f4:	c002                	sw	zero,0(sp)
+    100100f6:	00033283          	ld	t0,0(t1)
+    100100fa:	9282                	jalr	t0
+    100100fc:	34011073          	csrw	mscratch,sp
 
-000000fffff000f0 <restore_reg>:
-  fffff000f0:	4092                	lw	ra,4(sp)
-  fffff000f2:	41b2                	lw	gp,12(sp)
-  fffff000f4:	4242                	lw	tp,16(sp)
-  fffff000f6:	42d2                	lw	t0,20(sp)
-  fffff000f8:	4362                	lw	t1,24(sp)
-  fffff000fa:	43f2                	lw	t2,28(sp)
-  fffff000fc:	5402                	lw	s0,32(sp)
-  fffff000fe:	5492                	lw	s1,36(sp)
-  fffff00100:	5522                	lw	a0,40(sp)
-  fffff00102:	55b2                	lw	a1,44(sp)
-  fffff00104:	5642                	lw	a2,48(sp)
-  fffff00106:	56d2                	lw	a3,52(sp)
-  fffff00108:	5762                	lw	a4,56(sp)
-  fffff0010a:	57f2                	lw	a5,60(sp)
-  fffff0010c:	4806                	lw	a6,64(sp)
-  fffff0010e:	4896                	lw	a7,68(sp)
-  fffff00110:	4926                	lw	s2,72(sp)
-  fffff00112:	49b6                	lw	s3,76(sp)
-  fffff00114:	4a46                	lw	s4,80(sp)
-  fffff00116:	4ad6                	lw	s5,84(sp)
-  fffff00118:	4b66                	lw	s6,88(sp)
-  fffff0011a:	4bf6                	lw	s7,92(sp)
-  fffff0011c:	5c06                	lw	s8,96(sp)
-  fffff0011e:	5c96                	lw	s9,100(sp)
-  fffff00120:	5d26                	lw	s10,104(sp)
-  fffff00122:	5db6                	lw	s11,108(sp)
-  fffff00124:	5e46                	lw	t3,112(sp)
-  fffff00126:	5ed6                	lw	t4,116(sp)
-  fffff00128:	5f66                	lw	t5,120(sp)
-  fffff0012a:	5ff6                	lw	t6,124(sp)
-  fffff0012c:	4122                	lw	sp,8(sp)
-  fffff0012e:	30200073          	mret
-  fffff00132:	00000013          	nop
-  fffff00136:	00000013          	nop
-  fffff0013a:	00000013          	nop
-  fffff0013e:	0001                	nop
+0000000010010100 <restore_reg>:
+    10010100:	4092                	lw	ra,4(sp)
+    10010102:	41b2                	lw	gp,12(sp)
+    10010104:	4242                	lw	tp,16(sp)
+    10010106:	42d2                	lw	t0,20(sp)
+    10010108:	4362                	lw	t1,24(sp)
+    1001010a:	43f2                	lw	t2,28(sp)
+    1001010c:	5402                	lw	s0,32(sp)
+    1001010e:	5492                	lw	s1,36(sp)
+    10010110:	5522                	lw	a0,40(sp)
+    10010112:	55b2                	lw	a1,44(sp)
+    10010114:	5642                	lw	a2,48(sp)
+    10010116:	56d2                	lw	a3,52(sp)
+    10010118:	5762                	lw	a4,56(sp)
+    1001011a:	57f2                	lw	a5,60(sp)
+    1001011c:	4806                	lw	a6,64(sp)
+    1001011e:	4896                	lw	a7,68(sp)
+    10010120:	4926                	lw	s2,72(sp)
+    10010122:	49b6                	lw	s3,76(sp)
+    10010124:	4a46                	lw	s4,80(sp)
+    10010126:	4ad6                	lw	s5,84(sp)
+    10010128:	4b66                	lw	s6,88(sp)
+    1001012a:	4bf6                	lw	s7,92(sp)
+    1001012c:	5c06                	lw	s8,96(sp)
+    1001012e:	5c96                	lw	s9,100(sp)
+    10010130:	5d26                	lw	s10,104(sp)
+    10010132:	5db6                	lw	s11,108(sp)
+    10010134:	5e46                	lw	t3,112(sp)
+    10010136:	5ed6                	lw	t4,116(sp)
+    10010138:	5f66                	lw	t5,120(sp)
+    1001013a:	5ff6                	lw	t6,124(sp)
+    1001013c:	4122                	lw	sp,8(sp)
+    1001013e:	30200073          	mret
+    10010142:	0001                	nop
+    10010144:	00000013          	nop
+    10010148:	00000013          	nop
+    1001014c:	00000013          	nop
+    10010150:	00000013          	nop
+    10010154:	00000013          	nop
+    10010158:	00000013          	nop
+    1001015c:	00000013          	nop
+    10010160:	00000013          	nop
+    10010164:	00000013          	nop
+    10010168:	00000013          	nop
+    1001016c:	00000013          	nop
+    10010170:	00000013          	nop
+    10010174:	00000013          	nop
+    10010178:	00000013          	nop
+    1001017c:	00000013          	nop
 
-000000fffff00140 <__time_clock>:
-  fffff00140:	098000ef          	jal	ra,fffff001d8 <time_clock>
-  fffff00144:	b775                	j	fffff000f0 <restore_reg>
+0000000010010180 <__time_clock>:
+    10010180:	08e000ef          	jal	ra,1001020e <time_clock>
+    10010184:	bfb5                	j	10010100 <restore_reg>
 	...
 
-000000fffff00184 <zzy>:
-  fffff00184:	1101                	addi	sp,sp,-32
-  fffff00186:	ec22                	sd	s0,24(sp)
-  fffff00188:	1000                	addi	s0,sp,32
-  fffff0018a:	4785                	li	a5,1
-  fffff0018c:	fef42623          	sw	a5,-20(s0)
-  fffff00190:	4781                	li	a5,0
-  fffff00192:	853e                	mv	a0,a5
-  fffff00194:	6462                	ld	s0,24(sp)
-  fffff00196:	6105                	addi	sp,sp,32
-  fffff00198:	8082                	ret
+00000000100101ba <zzy>:
+    100101ba:	1101                	addi	sp,sp,-32
+    100101bc:	ec22                	sd	s0,24(sp)
+    100101be:	1000                	addi	s0,sp,32
+    100101c0:	4785                	li	a5,1
+    100101c2:	fef42623          	sw	a5,-20(s0)
+    100101c6:	4781                	li	a5,0
+    100101c8:	853e                	mv	a0,a5
+    100101ca:	6462                	ld	s0,24(sp)
+    100101cc:	6105                	addi	sp,sp,32
+    100101ce:	8082                	ret
 
-000000fffff0019a <error>:
-  fffff0019a:	1101                	addi	sp,sp,-32
-  fffff0019c:	ec22                	sd	s0,24(sp)
-  fffff0019e:	1000                	addi	s0,sp,32
-  fffff001a0:	4785                	li	a5,1
-  fffff001a2:	fef42623          	sw	a5,-20(s0)
-  fffff001a6:	4781                	li	a5,0
-  fffff001a8:	853e                	mv	a0,a5
-  fffff001aa:	6462                	ld	s0,24(sp)
-  fffff001ac:	6105                	addi	sp,sp,32
-  fffff001ae:	8082                	ret
+00000000100101d0 <error>:
+    100101d0:	1101                	addi	sp,sp,-32
+    100101d2:	ec22                	sd	s0,24(sp)
+    100101d4:	1000                	addi	s0,sp,32
+    100101d6:	4785                	li	a5,1
+    100101d8:	fef42623          	sw	a5,-20(s0)
+    100101dc:	4781                	li	a5,0
+    100101de:	853e                	mv	a0,a5
+    100101e0:	6462                	ld	s0,24(sp)
+    100101e2:	6105                	addi	sp,sp,32
+    100101e4:	8082                	ret
 
-000000fffff001b0 <bad_trap>:
-  fffff001b0:	1101                	addi	sp,sp,-32
-  fffff001b2:	ec22                	sd	s0,24(sp)
-  fffff001b4:	1000                	addi	s0,sp,32
-  fffff001b6:	4785                	li	a5,1
-  fffff001b8:	fef42623          	sw	a5,-20(s0)
-  fffff001bc:	0001                	nop
-  fffff001be:	6462                	ld	s0,24(sp)
-  fffff001c0:	6105                	addi	sp,sp,32
-  fffff001c2:	8082                	ret
+00000000100101e6 <bad_trap>:
+    100101e6:	1101                	addi	sp,sp,-32
+    100101e8:	ec22                	sd	s0,24(sp)
+    100101ea:	1000                	addi	s0,sp,32
+    100101ec:	4785                	li	a5,1
+    100101ee:	fef42623          	sw	a5,-20(s0)
+    100101f2:	0001                	nop
+    100101f4:	6462                	ld	s0,24(sp)
+    100101f6:	6105                	addi	sp,sp,32
+    100101f8:	8082                	ret
 
-000000fffff001c4 <pmp_trap>:
-  fffff001c4:	1101                	addi	sp,sp,-32
-  fffff001c6:	ec22                	sd	s0,24(sp)
-  fffff001c8:	1000                	addi	s0,sp,32
-  fffff001ca:	4785                	li	a5,1
-  fffff001cc:	fef42623          	sw	a5,-20(s0)
-  fffff001d0:	0001                	nop
-  fffff001d2:	6462                	ld	s0,24(sp)
-  fffff001d4:	6105                	addi	sp,sp,32
-  fffff001d6:	8082                	ret
+00000000100101fa <pmp_trap>:
+    100101fa:	1101                	addi	sp,sp,-32
+    100101fc:	ec22                	sd	s0,24(sp)
+    100101fe:	1000                	addi	s0,sp,32
+    10010200:	4785                	li	a5,1
+    10010202:	fef42623          	sw	a5,-20(s0)
+    10010206:	0001                	nop
+    10010208:	6462                	ld	s0,24(sp)
+    1001020a:	6105                	addi	sp,sp,32
+    1001020c:	8082                	ret
 
-000000fffff001d8 <time_clock>:
-  fffff001d8:	1101                	addi	sp,sp,-32
-  fffff001da:	ec22                	sd	s0,24(sp)
-  fffff001dc:	1000                	addi	s0,sp,32
-  fffff001de:	4789                	li	a5,2
-  fffff001e0:	fef42623          	sw	a5,-20(s0)
-  fffff001e4:	0001                	nop
-  fffff001e6:	6462                	ld	s0,24(sp)
-  fffff001e8:	6105                	addi	sp,sp,32
-  fffff001ea:	8082                	ret
+000000001001020e <time_clock>:
+    1001020e:	1101                	addi	sp,sp,-32
+    10010210:	ec22                	sd	s0,24(sp)
+    10010212:	1000                	addi	s0,sp,32
+    10010214:	4789                	li	a5,2
+    10010216:	fef42623          	sw	a5,-20(s0)
+    1001021a:	0001                	nop
+    1001021c:	6462                	ld	s0,24(sp)
+    1001021e:	6105                	addi	sp,sp,32
+    10010220:	8082                	ret
 
 Disassembly of section .data:
 
-000000fffff01000 <trap_table>:
-  fffff01000:	01b0                	addi	a2,sp,200
-  fffff01002:	fff0                	sd	a2,248(a5)
-  fffff01004:	00ff                	0xff
-  fffff01006:	0000                	unimp
-  fffff01008:	01c4                	addi	s1,sp,196
-  fffff0100a:	fff0                	sd	a2,248(a5)
-  fffff0100c:	00ff                	0xff
-  fffff0100e:	0000                	unimp
-  fffff01010:	01b0                	addi	a2,sp,200
-  fffff01012:	fff0                	sd	a2,248(a5)
-  fffff01014:	00ff                	0xff
-  fffff01016:	0000                	unimp
-  fffff01018:	01c4                	addi	s1,sp,196
-  fffff0101a:	fff0                	sd	a2,248(a5)
-  fffff0101c:	00ff                	0xff
-  fffff0101e:	0000                	unimp
-  fffff01020:	0140                	addi	s0,sp,132
-  fffff01022:	fff0                	sd	a2,248(a5)
-  fffff01024:	00ff                	0xff
-  fffff01026:	0000                	unimp
-  fffff01028:	01b0                	addi	a2,sp,200
-  fffff0102a:	fff0                	sd	a2,248(a5)
-  fffff0102c:	00ff                	0xff
-  fffff0102e:	0000                	unimp
-  fffff01030:	01b0                	addi	a2,sp,200
-  fffff01032:	fff0                	sd	a2,248(a5)
-  fffff01034:	00ff                	0xff
-  fffff01036:	0000                	unimp
-  fffff01038:	01b0                	addi	a2,sp,200
-  fffff0103a:	fff0                	sd	a2,248(a5)
-  fffff0103c:	00ff                	0xff
-  fffff0103e:	0000                	unimp
-  fffff01040:	01b0                	addi	a2,sp,200
-  fffff01042:	fff0                	sd	a2,248(a5)
-  fffff01044:	00ff                	0xff
-  fffff01046:	0000                	unimp
-  fffff01048:	01b0                	addi	a2,sp,200
-  fffff0104a:	fff0                	sd	a2,248(a5)
-  fffff0104c:	00ff                	0xff
-  fffff0104e:	0000                	unimp
-  fffff01050:	01b0                	addi	a2,sp,200
-  fffff01052:	fff0                	sd	a2,248(a5)
-  fffff01054:	00ff                	0xff
-  fffff01056:	0000                	unimp
-  fffff01058:	01b0                	addi	a2,sp,200
-  fffff0105a:	fff0                	sd	a2,248(a5)
-  fffff0105c:	00ff                	0xff
-  fffff0105e:	0000                	unimp
-  fffff01060:	0140                	addi	s0,sp,132
-  fffff01062:	fff0                	sd	a2,248(a5)
-  fffff01064:	00ff                	0xff
+0000000010010240 <trap_table>:
+    10010240:	01e6                	slli	gp,gp,0x19
+    10010242:	1001                	c.nop	-32
+    10010244:	0000                	unimp
+    10010246:	0000                	unimp
+    10010248:	01fa                	slli	gp,gp,0x1e
+    1001024a:	1001                	c.nop	-32
+    1001024c:	0000                	unimp
+    1001024e:	0000                	unimp
+    10010250:	01e6                	slli	gp,gp,0x19
+    10010252:	1001                	c.nop	-32
+    10010254:	0000                	unimp
+    10010256:	0000                	unimp
+    10010258:	01fa                	slli	gp,gp,0x1e
+    1001025a:	1001                	c.nop	-32
+    1001025c:	0000                	unimp
+    1001025e:	0000                	unimp
+    10010260:	0180                	addi	s0,sp,192
+    10010262:	1001                	c.nop	-32
+    10010264:	0000                	unimp
+    10010266:	0000                	unimp
+    10010268:	01e6                	slli	gp,gp,0x19
+    1001026a:	1001                	c.nop	-32
+    1001026c:	0000                	unimp
+    1001026e:	0000                	unimp
+    10010270:	01e6                	slli	gp,gp,0x19
+    10010272:	1001                	c.nop	-32
+    10010274:	0000                	unimp
+    10010276:	0000                	unimp
+    10010278:	01e6                	slli	gp,gp,0x19
+    1001027a:	1001                	c.nop	-32
+    1001027c:	0000                	unimp
+    1001027e:	0000                	unimp
+    10010280:	01e6                	slli	gp,gp,0x19
+    10010282:	1001                	c.nop	-32
+    10010284:	0000                	unimp
+    10010286:	0000                	unimp
+    10010288:	01e6                	slli	gp,gp,0x19
+    1001028a:	1001                	c.nop	-32
+    1001028c:	0000                	unimp
+    1001028e:	0000                	unimp
+    10010290:	01e6                	slli	gp,gp,0x19
+    10010292:	1001                	c.nop	-32
+    10010294:	0000                	unimp
+    10010296:	0000                	unimp
+    10010298:	01e6                	slli	gp,gp,0x19
+    1001029a:	1001                	c.nop	-32
+    1001029c:	0000                	unimp
+    1001029e:	0000                	unimp
+    100102a0:	0180                	addi	s0,sp,192
+    100102a2:	1001                	c.nop	-32
+    100102a4:	0000                	unimp
+	...
+
+Disassembly of section .bootdata:
+
+0000000010019000 <bootstack>:
 	...
 
 Disassembly of section .riscv.attributes:
@@ -269,7 +291,7 @@ Disassembly of section .riscv.attributes:
    2:	0000                	unimp
    4:	7200                	ld	s0,32(a2)
    6:	7369                	lui	t1,0xffffa
-   8:	01007663          	bgeu	zero,a6,14 <reset_vector-0xffffefffec>
+   8:	01007663          	bgeu	zero,a6,14 <reset_vector-0x1000ffec>
    c:	002a                	c.slli	zero,0xa
    e:	0000                	unimp
   10:	1004                	addi	s1,sp,32
