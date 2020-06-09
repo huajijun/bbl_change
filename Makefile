@@ -7,3 +7,5 @@ dump:
 	riscv64-ls-elf-objdump -D test > test.dmp
 other:
 	#riscv64-ls-elf-gcc -nostartfiles -nostdlib assem.S test.c -L../lib -lsbi -Tass.lds -o test
+	dtc -I dts -O dtb -o output.dts  ./platform/kendryte/k210/k210.dts
+	fdtdump -sd output.dts
