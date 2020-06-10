@@ -1,0 +1,90 @@
+diff --git a/ass.lds b/ass.lds
+index ca7df19..a58493f 100644
+--- a/ass.lds
++++ b/ass.lds
+@@ -8,6 +8,6 @@ SECTIONS
+   .data : { *(.data) }
+   . = ALIGN(0x1000);
+   .bss	: { *(.bss) }
+-  .zz 0x20010000 : { *(.vma) }
++  .zz 0xffffffffc00F0000 :AT(0x100F0000) { *(.vma) }
+   .bootdata : {*(.bootdata)}
+ }
+diff --git a/assem.S b/assem.S
+index a30f435..e5feb5e 100644
+--- a/assem.S
++++ b/assem.S
+@@ -40,14 +40,6 @@ reset_vector:
+ 	li x30, 0
+ 	li x31, 0
+ 
+-    lui t0, %hi(bootstack)
+-    li t1 , 0x10000000
+-    sub t0,t0,t1
+-    srli t0,t0,12
+-    li t1, 8 <<60
+-    or      t0, t0, t1
+-    csrw    satp, t0
+-    sfence.vma
+ 
+     li x1,0
+ 	csrw mscratch, x0
+@@ -85,8 +77,15 @@ reset_vector:
+  #   	csrr a0 , mstatus
+   #  	or a0 , a0, 0x8
+     	csrw mstatus, a0
+-	jal zzy
+-	ecall
++    	lui t0, %hi(boot_page_table_sv39)
++    	li t1 , 0xffffffffc00F0000 - 0x100F0000
++    	sub t0,t0,t1
++    	srli t0,t0,12
++    	li t1, 8 <<60
++    	or      t0, t0, t1
++    	csrw    satp, t0
++    	sfence.vma
++	j bblvma
+ #	j _payload_start
+ 1:
+ 	j 1b
+@@ -194,9 +193,6 @@ __time_clock:
+ .align 6
+ stacks:
+ 	.skip RISCV_PGSIZE * MAX_HARTS
+-.section .vma
+-.align 6
+-vma:
+     
+ 
+ .section .data
+@@ -215,6 +211,16 @@ trap_table:
+ 	.dc.a bad_trap
+ 	.dc.a bad_trap
+ 	.dc.a __time_clock
++.section .vma
++.align 12
++bblvma:
++	li x15, 0
++	li x16, 0
++	li x17, 0
++	li x18, 0
++	li x19, 0
++	li x20, 0
++	
+  
+ .section .bootdata
+ .align 12    
+@@ -222,6 +228,9 @@ bootstack:
+     .space 4096 * 4
+     .global bootstacktop
+ bootstacktop:
++boot_page_table_sv39:
++	.zero 8*512
++	.quad (0x100F0<< 10)| 0xcf
+ #.globl _payload_start, _payload_end
+ #_payload_start:
+ #	.incbin "/home/zhangzy/bbl_change/testCopy"
+diff --git a/test b/test
+deleted file mode 100755
+index aff9418..0000000
+Binary files a/test and /dev/null differ

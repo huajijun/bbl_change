@@ -39,15 +39,27 @@ reset_vector:
 	li x29, 0
 	li x30, 0
 	li x31, 0
-
-    lui t0, %hi(bootstack)
-    li t1 , 0x10000000
+	li a1 , 0x6800
+	csrr a2, mstatus
+	or a2,a2 , a1
+	csrw mstatus, a2
+	la a3 , test
+	csrw mepc ,a3
+	mret
+.align 12
+test:	
+    li t3 ,0
+    la sp, bootstacktop
+    lui t0, %hi(boot_page)
+    li t1 , 0xffffffffc00F0000 - 0x100F0000
     sub t0,t0,t1
     srli t0,t0,12
     li t1, 8 <<60
     or      t0, t0, t1
     csrw    satp, t0
-    sfence.vma
+    auipc t3 , 0
+    la t0 , change
+    jalr t0 
 
     li x1,0
 	csrw mscratch, x0
@@ -196,7 +208,14 @@ stacks:
 	.skip RISCV_PGSIZE * MAX_HARTS
 .section .vma
 .align 6
-vma:
+.global change
+change:	
+	li x1, 0
+	li x2, 0
+	li x3, 0
+	li x4, 0
+	li x5, 0
+	li x6, 0
     
 
 .section .data
@@ -222,6 +241,10 @@ bootstack:
     .space 4096 * 4
     .global bootstacktop
 bootstacktop:
+boot_page:
+	.zero 8*511
+	.quad (0x100F0<< 10)| 0xcf
+
 #.globl _payload_start, _payload_end
 #_payload_start:
 #	.incbin "/home/zhangzy/bbl_change/testCopy"

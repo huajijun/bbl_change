@@ -8,6 +8,6 @@ SECTIONS
   .data : { *(.data) }
   . = ALIGN(0x1000);
   .bss	: { *(.bss) }
-  .zz 0x20010000 : { *(.vma) }
+  .zz 0xffffffffc00F0000 :AT(0x100F0000) { *(.vma) }
   .bootdata : {*(.bootdata)}
 }
