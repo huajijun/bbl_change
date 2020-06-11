@@ -1,11 +1,16 @@
 all:
 	riscv64-ls-elf-gcc -nostartfiles -nostdlib assem.S test.c   -Tass.lds -o test
-spike:
-	spike -d -m0x10000000:0xFF0000 test
+spike: test
+	spike -d -m0x40000000:0xFF0000 test
 
-dump:
-	riscv64-ls-elf-objdump -D test > test.dmp
+dump: test
+	riscv64-ls-elf-objdump -x -d test > test.dmp
+	riscv64-ls-elf-objdump -j .data -s test >> test.dmp
 other:
 	#riscv64-ls-elf-gcc -nostartfiles -nostdlib assem.S test.c -L../lib -lsbi -Tass.lds -o test
 	dtc -I dts -O dtb -o output.dts  ./platform/kendryte/k210/k210.dts
 	fdtdump -sd output.dts
+test: prac.S vma.lds
+	riscv64-ls-elf-gcc -nostartfiles -nostdlib prac.S -Tvma.lds -o test
+clean:
+	rm test -rf
