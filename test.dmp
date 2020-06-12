@@ -3,83 +3,139 @@ test：     文件格式 elf64-littleriscv
 test
 体系结构：riscv:rv64， 标志 0x00000112：
 EXEC_P, HAS_SYMS, D_PAGED
-起始地址 0x0000000040000000
+起始地址 0x0000000040000080
 
 程序头：
     LOAD off    0x0000000000001000 vaddr 0x0000000040000000 paddr 0x0000000040000000 align 2**12
-         filesz 0x0000000000000076 memsz 0x0000000000000076 flags r-x
+         filesz 0x0000000000000102 memsz 0x0000000000000102 flags r-x
     LOAD off    0x0000000000002000 vaddr 0x0000000040001000 paddr 0x0000000040001000 align 2**12
          filesz 0x0000000000005000 memsz 0x0000000000005000 flags rw-
+    LOAD off    0x0000000000007000 vaddr 0xffffffffc0000000 paddr 0x0000000080000000 align 2**12
+         filesz 0x0000000000000016 memsz 0x0000000000000016 flags r-x
 
 节：
 Idx Name          Size      VMA               LMA               File off  Algn
-  0 .text         00000076  0000000040000000  0000000040000000  00001000  2**6
+  0 .text         00000102  0000000040000000  0000000040000000  00001000  2**6
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   1 .data         00005000  0000000040001000  0000000040001000  00002000  2**6
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .riscv.attributes 00000033  0000000000000000  0000000000000000  00007000  2**0
+  2 .paddr        00000016  ffffffffc0000000  0000000080000000  00007000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .comment      00000011  0000000000000000  0000000000000000  00007016  2**0
+                  CONTENTS, READONLY
+  4 .riscv.attributes 00000035  0000000000000000  0000000000000000  00007027  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 0000000040000000 l    d  .text	0000000000000000 .text
 0000000040001000 l    d  .data	0000000000000000 .data
+ffffffffc0000000 l    d  .paddr	0000000000000000 .paddr
+0000000000000000 l    d  .comment	0000000000000000 .comment
 0000000000000000 l    d  .riscv.attributes	0000000000000000 .riscv.attributes
-0000000000000000 l    df *ABS*	0000000000000000 /tmp/ccCAB9s1.o
-0000000040000002 l       .text	0000000000000000 do_reset
-0000000040000040 l       .text	0000000000000000 test
-0000000040000024 l       .text	0000000000000000 change
+0000000000000000 l    df *ABS*	0000000000000000 paddr.c
+0000000000000000 l    df *ABS*	0000000000000000 /tmp/ccQt5xzb.o
+0000000040000082 l       .text	0000000000000000 do_reset
+00000000400000b0 l       .text	0000000000000000 test
 0000000040001000 l       .data	0000000000000000 boot_page
 0000000040002000 l       .data	0000000000000000 bootstack
-0000000040000000 g       .text	0000000000000000 reset_vector
+ffffffffc0000000 l       .paddr	0000000000000000 patable
+ffffffffc0000000 g       .paddr	0000000000000000 start_pa
+0000000040000080 g       .text	0000000000000000 reset_vector
+ffffffffc0000016 g       .paddr	0000000000000000 end_pa
 0000000040006000 g       .data	0000000000000000 bootstacktop
+0000000040000000 g     F .text	000000000000005e load_paddr
 
 
 
 Disassembly of section .text:
 
-0000000040000000 <reset_vector>:
-    40000000:	a009                	j	40000002 <do_reset>
-
-0000000040000002 <do_reset>:
-    40000002:	659d                	lui	a1,0x7
-    40000004:	8005859b          	addiw	a1,a1,-2048
-    40000008:	30002673          	csrr	a2,mstatus
-    4000000c:	8e4d                	or	a2,a2,a1
-    4000000e:	30061073          	csrw	mstatus,a2
-    40000012:	00000697          	auipc	a3,0x0
-    40000016:	02e68693          	addi	a3,a3,46 # 40000040 <test>
-    4000001a:	34169073          	csrw	mepc,a3
-    4000001e:	30200073          	mret
-    40000022:	0001                	nop
-
-0000000040000024 <change>:
-    40000024:	4081                	li	ra,0
-    40000026:	4101                	li	sp,0
-    40000028:	4181                	li	gp,0
-    4000002a:	4201                	li	tp,0
-    4000002c:	4281                	li	t0,0
-    4000002e:	4301                	li	t1,0
-    40000030:	4381                	li	t2,0
-    40000032:	4401                	li	s0,0
-    40000034:	4481                	li	s1,0
-    40000036:	4501                	li	a0,0
-    40000038:	4581                	li	a1,0
-    4000003a:	4601                	li	a2,0
-    4000003c:	4681                	li	a3,0
-    4000003e:	0001                	nop
-
-0000000040000040 <test>:
-    40000040:	4e01                	li	t3,0
-    40000042:	00006117          	auipc	sp,0x6
-    40000046:	fbe10113          	addi	sp,sp,-66 # 40006000 <bootstacktop>
-    4000004a:	00001297          	auipc	t0,0x1
-    4000004e:	fb628293          	addi	t0,t0,-74 # 40001000 <boot_page>
-    40000052:	00c2d293          	srli	t0,t0,0xc
-    40000056:	fff0031b          	addiw	t1,zero,-1
-    4000005a:	137e                	slli	t1,t1,0x3f
-    4000005c:	0062e2b3          	or	t0,t0,t1
-    40000060:	18029073          	csrw	satp,t0
-    40000064:	fc1ff0ef          	jal	ra,40000024 <change>
+0000000040000000 <load_paddr>:
+    40000000:	7179                	addi	sp,sp,-48
+    40000002:	f422                	sd	s0,40(sp)
+    40000004:	1800                	addi	s0,sp,48
+    40000006:	c00007b7          	lui	a5,0xc0000
+    4000000a:	00078793          	mv	a5,a5
+    4000000e:	fef43423          	sd	a5,-24(s0)
+    40000012:	c00007b7          	lui	a5,0xc0000
+    40000016:	01678793          	addi	a5,a5,22 # ffffffffc0000016 <end_pa>
+    4000001a:	fcf43c23          	sd	a5,-40(s0)
+    4000001e:	4785                	li	a5,1
+    40000020:	07fe                	slli	a5,a5,0x1f
+    40000022:	fef43023          	sd	a5,-32(s0)
+    40000026:	a00d                	j	40000048 <load_paddr+0x48>
+    40000028:	fe843703          	ld	a4,-24(s0)
+    4000002c:	00170793          	addi	a5,a4,1
+    40000030:	fef43423          	sd	a5,-24(s0)
+    40000034:	fe043783          	ld	a5,-32(s0)
+    40000038:	00178693          	addi	a3,a5,1
+    4000003c:	fed43023          	sd	a3,-32(s0)
+    40000040:	00074703          	lbu	a4,0(a4)
+    40000044:	00e78023          	sb	a4,0(a5)
+    40000048:	fe843703          	ld	a4,-24(s0)
+    4000004c:	fd843783          	ld	a5,-40(s0)
+    40000050:	fce7fce3          	bgeu	a5,a4,40000028 <load_paddr+0x28>
+    40000054:	0001                	nop
+    40000056:	0001                	nop
+    40000058:	7422                	ld	s0,40(sp)
+    4000005a:	6145                	addi	sp,sp,48
+    4000005c:	8082                	ret
 	...
+
+0000000040000080 <reset_vector>:
+    40000080:	a009                	j	40000082 <do_reset>
+
+0000000040000082 <do_reset>:
+    40000082:	659d                	lui	a1,0x7
+    40000084:	8005859b          	addiw	a1,a1,-2048
+    40000088:	30002673          	csrr	a2,mstatus
+    4000008c:	8e4d                	or	a2,a2,a1
+    4000008e:	30061073          	csrw	mstatus,a2
+    40000092:	00000697          	auipc	a3,0x0
+    40000096:	01e68693          	addi	a3,a3,30 # 400000b0 <test>
+    4000009a:	34169073          	csrw	mepc,a3
+    4000009e:	30200073          	mret
+    400000a2:	0001                	nop
+    400000a4:	00000013          	nop
+    400000a8:	00000013          	nop
+    400000ac:	00000013          	nop
+
+00000000400000b0 <test>:
+    400000b0:	4e01                	li	t3,0
+    400000b2:	00006117          	auipc	sp,0x6
+    400000b6:	f4e10113          	addi	sp,sp,-178 # 40006000 <bootstacktop>
+    400000ba:	00001297          	auipc	t0,0x1
+    400000be:	f4628293          	addi	t0,t0,-186 # 40001000 <boot_page>
+    400000c2:	00c2d293          	srli	t0,t0,0xc
+    400000c6:	fff0031b          	addiw	t1,zero,-1
+    400000ca:	137e                	slli	t1,t1,0x3f
+    400000cc:	0062e2b3          	or	t0,t0,t1
+    400000d0:	12000073          	sfence.vma
+    400000d4:	0ff0000f          	fence
+    400000d8:	18029073          	csrw	satp,t0
+    400000dc:	0010079b          	addiw	a5,zero,1
+    400000e0:	178a                	slli	a5,a5,0x22
+    400000e2:	17fd                	addi	a5,a5,-1
+    400000e4:	07fa                	slli	a5,a5,0x1e
+    400000e6:	12000073          	sfence.vma
+    400000ea:	0ff0000f          	fence
+    400000ee:	0007b803          	ld	a6,0(a5)
+    400000f2:	0000100f          	fence.i
+    400000f6:	9782                	jalr	a5
+	...
+
+Disassembly of section .paddr:
+
+ffffffffc0000000 <start_pa>:
+ffffffffc0000000:	4181                	li	gp,0
+ffffffffc0000002:	4201                	li	tp,0
+ffffffffc0000004:	4281                	li	t0,0
+ffffffffc0000006:	4301                	li	t1,0
+ffffffffc0000008:	4381                	li	t2,0
+ffffffffc000000a:	4401                	li	s0,0
+ffffffffc000000c:	4481                	li	s1,0
+ffffffffc000000e:	4501                	li	a0,0
+ffffffffc0000010:	4581                	li	a1,0
+ffffffffc0000012:	4601                	li	a2,0
+ffffffffc0000014:	4681                	li	a3,0
 
 test：     文件格式 elf64-littleriscv
 
@@ -339,7 +395,7 @@ Contents of section .data:
  40001fc0 00000000 00000000 00000000 00000000  ................
  40001fd0 00000000 00000000 00000000 00000000  ................
  40001fe0 00000000 00000000 00000000 00000000  ................
- 40001ff0 00000000 00000000 00000000 00000000  ................
+ 40001ff0 00000000 00000000 cf000020 00000000  ........... ....
  40002000 00000000 00000000 00000000 00000000  ................
  40002010 00000000 00000000 00000000 00000000  ................
  40002020 00000000 00000000 00000000 00000000  ................
