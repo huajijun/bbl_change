@@ -11,6 +11,6 @@ other:
 	dtc -I dts -O dtb -o output.dts  ./platform/kendryte/k210/k210.dts
 	fdtdump -sd output.dts
 test: prac.S vma.lds
-	riscv64-ls-elf-gcc -nostartfiles -nostdlib   -Tvma.lds paddr.c prac.S -o test
+	riscv64-ls-elf-gcc -nostartfiles -nostdlib   -Tvma.lds paddr.c physical_alloc.c prac.S -o test
 clean:
 	rm test -rf
